@@ -3,205 +3,161 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vijay Electronics | Railway Road Mukerian</title>
+    <title>IG ELECTRONS | Premium Showroom Mukerian</title>
     
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database-compat.js"></script>
 
     <style>
         :root {
-            --brand: #2d5bff;
-            --brand-dark: #1a3ab7;
+            --brand: #3d5afe;
             --surface: #0a0a0a;
-            --card: #151517;
-            --text-high: #ffffff;
-            --text-low: #8e8e93;
-            --border: rgba(255,255,255,0.08);
-            --nav-blur: rgba(10, 10, 10, 0.8);
+            --card-bg: #151517;
+            --text-main: #ffffff;
+            --text-dim: #94a3b8;
+            --border: rgba(255, 255, 255, 0.1);
+            --whatsapp: #25d366;
+            --danger: #ff4b4b;
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Plus Jakarta Sans', sans-serif; }
-        body { background: var(--surface); color: var(--text-high); overflow-x: hidden; }
+        body { background: var(--surface); color: var(--text-main); overflow-x: hidden; line-height: 1.6; }
 
-        /* HEADER */
+        /* NAVIGATION */
         header {
             position: fixed; top: 0; width: 100%; z-index: 1000;
-            background: var(--nav-blur); backdrop-filter: blur(25px);
+            background: rgba(10, 10, 10, 0.85); backdrop-filter: blur(20px);
             border-bottom: 1px solid var(--border); padding: 15px 5%;
             display: flex; justify-content: space-between; align-items: center;
         }
-        .logo-box { display: flex; align-items: center; gap: 10px; }
-        .logo-box h1 { font-size: 1.2rem; font-weight: 800; letter-spacing: -0.5px; }
-        
-        .search-bar {
-            flex-grow: 0.5; background: rgba(255,255,255,0.05); border-radius: 12px;
-            padding: 8px 15px; display: flex; align-items: center; border: 1px solid var(--border);
-        }
-        .search-bar input { background: none; border: none; color: white; margin-left: 10px; outline: none; width: 100%; }
+        .logo { font-weight: 800; font-size: 1.4rem; letter-spacing: -1px; text-transform: uppercase; }
+        .logo span { color: var(--brand); }
 
-        /* HERO AREA */
-        .hero-banner {
-            height: 85vh; background: linear-gradient(to bottom, rgba(0,0,0,0.4), var(--surface)), 
-            url('https://images.unsplash.com/photo-1550009158-9ebf69173e03?auto=format&fit=crop&q=80&w=2000');
-            background-size: cover; background-position: center;
-            display: flex; flex-direction: column; justify-content: center; padding: 0 8%;
-        }
-        .hero-banner h2 { font-size: 4.5rem; font-weight: 800; line-height: 1; max-width: 800px; }
-        .hero-banner p { font-size: 1.25rem; color: var(--text-low); margin: 20px 0 40px; max-width: 500px; }
+        /* HERO SECTION */
+        .hero { padding: 140px 5% 40px; text-align: center; }
+        .hero h1 { font-size: clamp(2.2rem, 5vw, 3.5rem); font-weight: 800; margin-bottom: 10px; letter-spacing: -1px; }
+        .hero p { color: var(--text-dim); font-size: 1.1rem; }
 
-        /* TIERED SECTIONS */
-        .page-width { padding: 80px 5%; }
-        .section-header { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 40px; }
-        .section-header h3 { font-size: 2rem; font-weight: 800; }
-        
-        /* CATEGORY SCROLLER */
-        .category-tabs { display: flex; gap: 15px; overflow-x: auto; padding-bottom: 20px; }
+        /* CATEGORY FILTER */
+        .tabs { display: flex; gap: 12px; overflow-x: auto; padding: 20px 5%; margin-bottom: 20px; scrollbar-width: none; }
+        .tabs::-webkit-scrollbar { display: none; }
         .tab { 
-            padding: 12px 25px; background: var(--card); border-radius: 100px; 
-            border: 1px solid var(--border); cursor: pointer; white-space: nowrap; transition: 0.3s;
+            padding: 10px 24px; background: var(--card-bg); border-radius: 100px; 
+            border: 1px solid var(--border); cursor: pointer; white-space: nowrap; 
+            font-size: 0.9rem; font-weight: 600; transition: 0.3s;
         }
         .tab.active { background: var(--brand); border-color: var(--brand); }
 
         /* PRODUCT GRID */
-        .product-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 30px; }
-        .product-card { 
-            background: var(--card); border-radius: 30px; padding: 25px; 
-            border: 1px solid var(--border); transition: 0.4s; position: relative;
+        .grid { display: grid; padding: 0 5% 100px; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 25px; }
+        .card { 
+            background: var(--card-bg); border-radius: 28px; padding: 20px; 
+            border: 1px solid var(--border); display: flex; flex-direction: column; transition: 0.3s; 
         }
-        .product-card:hover { transform: translateY(-10px); border-color: var(--brand); }
-        .product-img { 
-            height: 250px; background: #000; border-radius: 20px; margin-bottom: 20px;
-            display: flex; align-items: center; justify-content: center; overflow: hidden;
+        .card:hover { border-color: var(--brand); transform: translateY(-5px); }
+
+        .img-box { 
+            height: 240px; background: #000; border-radius: 20px; 
+            display: flex; align-items: center; justify-content: center; margin-bottom: 20px; 
         }
-        .product-img img { max-width: 85%; max-height: 85%; object-fit: contain; }
+        .img-box img { max-width: 85%; max-height: 85%; object-fit: contain; }
+
+        .price { font-size: 1.6rem; font-weight: 800; margin: 15px 0; color: #fff; }
         
-        .price-row { display: flex; justify-content: space-between; align-items: center; margin-top: 20px; }
-        .price-row .val { font-size: 1.6rem; font-weight: 800; }
-
-        .btn-action { 
-            background: var(--brand); color: white; border: none; padding: 14px 25px; 
-            border-radius: 15px; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 10px;
+        .whatsapp-btn {
+            background: var(--whatsapp); color: #fff; text-decoration: none; text-align: center;
+            padding: 16px; border-radius: 18px; font-weight: 700; display: flex; 
+            align-items: center; justify-content: center; gap: 10px; transition: 0.3s;
         }
+        .whatsapp-btn:hover { filter: brightness(1.1); }
 
-        /* ADMIN DRAWER */
+        /* ADMIN PANEL DRAWER */
         #adminUI {
-            position: fixed; top: 0; right: -500px; width: 500px; height: 100%;
+            position: fixed; top: 0; right: -100%; width: 500px; height: 100%;
             background: #111; z-index: 2000; transition: 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-            padding: 50px; border-left: 1px solid var(--brand);
+            padding: 40px; border-left: 1px solid var(--brand); overflow-y: auto;
+            box-shadow: -20px 0 50px rgba(0,0,0,0.8);
         }
         #adminUI.open { right: 0; }
-        .form-row { margin-bottom: 20px; }
-        label { display: block; font-size: 0.8rem; color: var(--text-low); margin-bottom: 8px; }
+        .admin-trigger { position: fixed; bottom: 30px; left: 30px; opacity: 0.1; cursor: pointer; transition: 0.3s; }
+        .admin-trigger:hover { opacity: 1; color: var(--brand); }
+
         input, select, textarea { 
-            width: 100%; background: #1a1a1a; border: 1px solid var(--border); 
-            padding: 15px; border-radius: 12px; color: white;
+            width: 100%; padding: 14px; background: #050505; border: 1px solid var(--border); 
+            color: white; border-radius: 12px; margin-bottom: 15px; outline: none;
         }
+        input:focus { border-color: var(--brand); }
 
-        /* CART INDICATOR */
-        .cart-bubble {
-            position: fixed; bottom: 30px; right: 30px; background: #25d366;
-            padding: 15px 30px; border-radius: 100px; display: flex; align-items: center;
-            gap: 15px; cursor: pointer; box-shadow: 0 10px 40px rgba(37, 211, 102, 0.3); z-index: 100;
+        .manage-item { 
+            background: #1a1a1a; padding: 15px; border-radius: 16px; margin-bottom: 12px; 
+            display: flex; justify-content: space-between; align-items: center; border: 1px solid var(--border);
         }
+        .controls { display: flex; gap: 15px; font-size: 0.8rem; font-weight: 800; }
+        .edit-btn { color: var(--brand); cursor: pointer; }
+        .del-btn { color: var(--danger); cursor: pointer; }
 
-        @media (max-width: 768px) {
-            .hero-banner h2 { font-size: 2.8rem; }
-            #adminUI { width: 100%; }
-        }
+        @media (max-width: 768px) { #adminUI { width: 100%; } }
     </style>
 </head>
 <body>
 
 <header>
-    <div class="logo-box">
-        <div style="background: var(--brand); width:35px; height:35px; border-radius:8px; display:flex; align-items:center; justify-content:center;">
-            <i class="ph-bold ph-lightning"></i>
-        </div>
-        <h1>VIJAY ELECTRONICS</h1>
-    </div>
-    
-    <div class="search-bar">
-        <i class="ph ph-magnifying-glass"></i>
-        <input type="text" id="searchInput" placeholder="Search brands or products..." onkeyup="handleSearch()">
-    </div>
-
-    <div style="display:flex; gap:20px; align-items:center;">
-        <i class="ph ph-sliders-horizontal" onclick="openAdmin()" style="cursor:pointer; font-size:1.4rem;"></i>
+    <div class="logo">IG <span>ELECTRONS</span></div>
+    <div style="text-align: right;">
+        <div style="font-size: 0.7rem; font-weight: 800; color: var(--brand);">RAILWAY ROAD</div>
+        <div style="font-size: 0.6rem; color: var(--text-dim);">MUKERIAN, PUNJAB</div>
     </div>
 </header>
 
-<section class="hero-banner">
-    <p>Railway Road • Mukerian</p>
-    <h2>Upgrade Your <br> Living Standards.</h2>
-    <p>Premium home appliances with authorized warranty and 24-hour delivery in Mukerian.</p>
+<section class="hero">
+    <h1>Smart Choice. Smart Home.</h1>
+    <p>Discover the latest appliances from global brands at local prices.</p>
 </section>
 
-<div class="page-width">
-    <div class="category-tabs" id="catTabs">
-        <div class="tab active" onclick="filterData('All')">All Inventory</div>
-        <div class="tab" onclick="filterData('Television')">LED TVs</div>
-        <div class="tab" onclick="filterData('Cooling')">Air Conditioners</div>
-        <div class="tab" onclick="filterData('Kitchen')">Kitchen Tech</div>
-        <div class="tab" onclick="filterData('Cleaning')">Laundry</div>
-    </div>
-
-    <div class="section-header">
-        <h3>Featured Collections</h3>
-    </div>
-
-    <div class="product-grid" id="mainGrid">
-        </div>
+<div class="tabs">
+    <div class="tab active" onclick="filterData('All', this)">All Products</div>
+    <div class="tab" onclick="filterData('TV', this)">LED Television</div>
+    <div class="tab" onclick="filterData('Cooling', this)">AC & Fridge</div>
+    <div class="tab" onclick="filterData('Kitchen', this)">Kitchen Tech</div>
+    <div class="tab" onclick="filterData('Laundry', this)">Washing Machines</div>
 </div>
+
+<div id="productGrid" class="grid"></div>
 
 <div id="adminUI">
-    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:40px;">
-        <h2>Stock Manager</h2>
-        <i class="ph ph-x" onclick="openAdmin()" style="cursor:pointer; font-size:1.5rem;"></i>
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:30px;">
+        <h2>Staff Command Center</h2>
+        <i class="ph ph-x" onclick="closeAdmin()" style="cursor:pointer; font-size:1.5rem;"></i>
     </div>
 
-    <div class="form-row">
-        <label>Product Name</label>
-        <input type="text" id="admName" placeholder="e.g. Sony Bravia 55' OLED">
-    </div>
-    <div class="form-row">
-        <label>Category</label>
-        <select id="admCat">
-            <option value="Television">Television</option>
+    <div style="background: rgba(61, 90, 254, 0.1); padding: 25px; border-radius: 24px; border: 1px solid var(--brand); margin-bottom: 40px;">
+        <h4 style="margin-bottom:15px; color: var(--brand);">Add or Edit Product</h4>
+        <input type="hidden" id="editId">
+        <input type="text" id="pName" placeholder="Product Title">
+        <select id="pCat">
+            <option value="TV">Television</option>
             <option value="Cooling">Cooling</option>
             <option value="Kitchen">Kitchen</option>
-            <option value="Cleaning">Cleaning</option>
+            <option value="Laundry">Laundry</option>
         </select>
-    </div>
-    <div class="form-row">
-        <label>Display Price (INR)</label>
-        <input type="number" id="admPrice" placeholder="55000">
-    </div>
-    <div class="form-row">
-        <label>Specs/Features</label>
-        <textarea id="admDesc" rows="3"></textarea>
-    </div>
-    <div class="form-row">
-        <label>Product Image</label>
-        <input type="file" id="admFile" accept="image/*">
+        <input type="number" id="pPrice" placeholder="Price (INR)">
+        <textarea id="pDesc" placeholder="Key Features / Warranty..." rows="2"></textarea>
+        <label style="font-size: 0.7rem; color: var(--text-dim); margin-bottom: 5px; display: block;">Product Photo</label>
+        <input type="file" id="pFile" accept="image/*">
+        <button onclick="saveProduct()" style="width:100%; padding:16px; border-radius:12px; border:none; background:var(--brand); color:#fff; font-weight:800; cursor:pointer;">Push to Live Showroom</button>
     </div>
 
-    <button class="btn-action" style="width:100%; margin-top:20px; justify-content:center;" onclick="pushProduct()">
-        <i class="ph ph-cloud-arrow-up"></i> Sync to Website
-    </button>
+    <h3 style="margin-bottom:20px; font-size: 1.1rem; border-bottom: 1px solid var(--border); padding-bottom: 10px;">Inventory Management</h3>
+    <div id="adminList"></div>
 </div>
 
-<div class="cart-bubble" onclick="sendWhatsAppOrder()">
-    <i class="ph-fill ph-whatsapp-logo" style="font-size:1.8rem;"></i>
-    <div>
-        <div style="font-size:0.7rem; font-weight:700; opacity:0.8;">WHATSAPP ORDER</div>
-        <div id="cartStatus" style="font-weight:800;">0 Items selected</div>
-    </div>
-</div>
+<div class="admin-trigger" onclick="openAdmin()"><i class="ph ph-lock-key" style="font-size: 28px;"></i></div>
 
 <script>
-    // INITIALIZE FIREBASE
+    // 1. DATABASE CONNECTION
     const firebaseConfig = {
         apiKey: "AIzaSyAjhi25Q8urRDAS33nxMl3J3PCh8u8-b64",
         authDomain: "igelectrons.firebaseapp.com",
@@ -214,91 +170,130 @@
 
     firebase.initializeApp(firebaseConfig);
     const db = firebase.database();
-    
-    let localInventory = [];
-    let cart = [];
+    let currentInventory = [];
 
-    // CORE FUNCTIONS
+    // 2. ADMIN ACCESS
     function openAdmin() {
-        if(!document.getElementById('adminUI').classList.contains('open')) {
-            if(prompt("Staff PIN:") !== "ig99") return;
+        if(prompt("Enter IG Staff Access PIN:") === "ig99") {
+            document.getElementById('adminUI').classList.add('open');
+        } else {
+            alert("Unauthorized access.");
         }
-        document.getElementById('adminUI').classList.toggle('open');
     }
+    function closeAdmin() { document.getElementById('adminUI').classList.remove('open'); }
 
-    function pushProduct() {
-        const name = document.getElementById('admName').value;
-        const cat = document.getElementById('admCat').value;
-        const price = document.getElementById('admPrice').value;
-        const desc = document.getElementById('admDesc').value;
-        const file = document.getElementById('admFile').files[0];
-
-        if(!file || !name) return alert("Fill all details");
-
-        const reader = new FileReader();
-        reader.onloadend = () => {
-            db.ref('inventory').push({ name, cat, price, desc, img: reader.result })
-            .then(() => {
-                alert("Inventory Updated!");
-                location.reload();
-            });
-        };
-        reader.readAsDataURL(file);
-    }
-
+    // 3. DATA SYNC
     db.ref('inventory').on('value', (snap) => {
         const data = snap.val();
-        localInventory = [];
-        for(let id in data) localInventory.push({id, ...data[id]});
-        render(localInventory);
+        currentInventory = [];
+        for(let id in data) currentInventory.push({id, ...data[id]});
+        renderPublic(currentInventory);
+        renderAdmin(currentInventory);
     });
 
-    function render(data) {
-        const grid = document.getElementById('mainGrid');
-        grid.innerHTML = data.map(p => `
-            <div class="product-card">
-                <div class="product-img"><img src="${p.img}"></div>
-                <div style="font-size:0.75rem; color:var(--brand); font-weight:800; margin-bottom:5px;">${p.cat.toUpperCase()}</div>
-                <h4 style="font-size:1.2rem; height:50px; overflow:hidden;">${p.name}</h4>
-                <p style="font-size:0.85rem; color:var(--text-low); margin:10px 0;">${p.desc.substring(0, 60)}...</p>
-                <div class="price-row">
-                    <div class="val">₹${parseInt(p.price).toLocaleString('en-IN')}</div>
-                    <button class="btn-action" onclick="addToCart('${p.name}', ${p.price})">
-                        <i class="ph ph-plus"></i> Add
-                    </button>
+    // 4. RENDERING FUNCTIONS
+    function renderPublic(items) {
+        const grid = document.getElementById('productGrid');
+        grid.innerHTML = items.map(p => {
+            const predefinedText = `Hi IG ELECTRONS Mukerian, I am interested in purchasing the ${p.name} (Price: ₹${p.price}). Is it available in your store?`;
+            const waUrl = `https://wa.me/919876898832?text=${encodeURIComponent(predefinedText)}`;
+            
+            return `
+                <div class="card">
+                    <div class="img-box"><img src="${p.img}"></div>
+                    <small style="color:var(--brand); font-weight:800; font-size: 0.7rem;">${p.cat.toUpperCase()}</small>
+                    <h3 style="margin:10px 0; height:50px; overflow:hidden; font-size: 1.15rem;">${p.name}</h3>
+                    <div class="price">₹${parseInt(p.price).toLocaleString('en-IN')}</div>
+                    <a href="${waUrl}" target="_blank" class="whatsapp-btn">
+                        <i class="ph-fill ph-whatsapp-logo"></i> Buy via WhatsApp
+                    </a>
                 </div>
-                <div style="margin-top:15px; font-size:0.6rem; opacity:0.2; cursor:pointer" onclick="deleteItem('${p.id}')">ADMIN: DELETE</div>
+            `;
+        }).join('');
+    }
+
+    function renderAdmin(items) {
+        const list = document.getElementById('adminList');
+        list.innerHTML = items.map(p => `
+            <div class="manage-item">
+                <div style="max-width: 60%;">
+                    <div style="font-weight:700; font-size:0.9rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${p.name}</div>
+                    <div style="font-size:0.7rem; color:var(--text-dim);">₹${p.price} | ${p.cat}</div>
+                </div>
+                <div class="controls">
+                    <span class="edit-btn" onclick="startEdit('${p.id}')">EDIT</span>
+                    <span class="del-btn" onclick="deleteItem('${p.id}')">DELETE</span>
+                </div>
             </div>
         `).join('');
     }
 
-    function filterData(category) {
-        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-        event.target.classList.add('active');
-        if(category === 'All') return render(localInventory);
-        render(localInventory.filter(p => p.cat === category));
+    // 5. STAFF OPERATIONS
+    function saveProduct() {
+        const id = document.getElementById('editId').value;
+        const name = document.getElementById('pName').value;
+        const cat = document.getElementById('pCat').value;
+        const price = document.getElementById('pPrice').value;
+        const desc = document.getElementById('pDesc').value;
+        const file = document.getElementById('pFile').files[0];
+
+        if(!name || !price) return alert("Product Name and Price are mandatory.");
+
+        const executePush = (imgData = null) => {
+            const payload = { name, cat, price, desc };
+            if(imgData) payload.img = imgData;
+
+            if(id) {
+                db.ref('inventory/' + id).update(payload).then(() => {
+                    alert("Product updated successfully.");
+                    resetForm();
+                });
+            } else {
+                if(!imgData) return alert("Please upload a product photo for new entries.");
+                db.ref('inventory').push(payload).then(() => {
+                    alert("Product added to showroom.");
+                    resetForm();
+                });
+            }
+        };
+
+        if(file) {
+            const reader = new FileReader();
+            reader.onloadend = () => executePush(reader.result);
+            reader.readAsDataURL(file);
+        } else {
+            executePush();
+        }
     }
 
-    function handleSearch() {
-        const query = document.getElementById('searchInput').value.toLowerCase();
-        render(localInventory.filter(p => p.name.toLowerCase().includes(query)));
-    }
-
-    function addToCart(name, price) {
-        cart.push({name, price});
-        document.getElementById('cartStatus').innerText = `${cart.length} Items Selected`;
-    }
-
-    function sendWhatsAppOrder() {
-        if(cart.length === 0) return alert("Add products to order first.");
-        const details = cart.map(i => `• ${i.name} (₹${i.price})`).join('%0A');
-        const total = cart.reduce((s, i) => s + parseInt(i.price), 0);
-        const text = `Hi Vijay Electronics Mukerian!%0AI want to buy:%0A${details}%0A%0ATotal: ₹${total.toLocaleString('en-IN')}`;
-        window.open(`https://wa.me/91987698832?text=${text}`);
+    function startEdit(id) {
+        const item = currentInventory.find(p => p.id === id);
+        document.getElementById('editId').value = item.id;
+        document.getElementById('pName').value = item.name;
+        document.getElementById('pCat').value = item.cat;
+        document.getElementById('pPrice').value = item.price;
+        document.getElementById('pDesc').value = item.desc;
+        alert("Details loaded. Modify fields and click 'Push to Live Showroom' to save.");
     }
 
     function deleteItem(id) {
-        if(confirm("Permanently delete?")) db.ref('inventory/' + id).remove();
+        if(confirm("Are you sure you want to PERMANENTLY remove this product from the website?")) {
+            db.ref('inventory/' + id).remove();
+        }
+    }
+
+    function resetForm() {
+        document.getElementById('editId').value = '';
+        document.getElementById('pName').value = '';
+        document.getElementById('pPrice').value = '';
+        document.getElementById('pDesc').value = '';
+        document.getElementById('pFile').value = '';
+    }
+
+    function filterData(cat, btn) {
+        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+        btn.classList.add('active');
+        renderPublic(cat === 'All' ? currentInventory : currentInventory.filter(p => p.cat === cat));
     }
 </script>
 
